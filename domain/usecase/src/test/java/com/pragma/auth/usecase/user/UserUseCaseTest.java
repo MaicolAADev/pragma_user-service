@@ -27,7 +27,6 @@ class UserUseCaseTest {
 
     private UserUseCase userUseCase;
 
-    // Test data
     private static final LocalDate VALID_BIRTH_DATE = LocalDate.of(1990, 1, 1);
     private static final BigDecimal VALID_SALARY = new BigDecimal("3000000");
     private static final BigDecimal MAX_SALARY = new BigDecimal("15000000");
@@ -53,7 +52,6 @@ class UserUseCaseTest {
         when(userPersistencePort.existsByEmail(VALID_EMAIL)).thenReturn(Mono.just(false));
         when(userPersistencePort.registerUser(any(User.class))).thenReturn(Mono.just(expectedUser));
 
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, VALID_BIRTH_DATE, ADDRESS, PHONE, VALID_EMAIL, VALID_SALARY
                 ))
@@ -71,10 +69,8 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should throw DuplicateEmailException when email already exists")
     void registerUser_WithDuplicateEmail_ThrowsException() {
-        // Arrange
         when(userPersistencePort.existsByEmail(VALID_EMAIL)).thenReturn(Mono.just(true));
 
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, VALID_BIRTH_DATE, ADDRESS, PHONE, VALID_EMAIL, VALID_SALARY
                 ))
@@ -121,7 +117,6 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should validate negative baseSalary")
     void registerUser_WithNegativeSalary_ThrowsValidationException() {
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, VALID_BIRTH_DATE, ADDRESS, PHONE, VALID_EMAIL, NEGATIVE_SALARY
                 ))
@@ -137,7 +132,6 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should validate excessive baseSalary")
     void registerUser_WithExcessiveSalary_ThrowsValidationException() {
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, VALID_BIRTH_DATE, ADDRESS, PHONE, VALID_EMAIL, EXCESSIVE_SALARY
                 ))
@@ -153,13 +147,11 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should accept maximum allowed salary")
     void registerUser_WithMaximumSalary_ReturnsUser() {
-        // Arrange
         User expectedUser = createUser(1L, "max@pragma.com", MAX_SALARY);
 
         when(userPersistencePort.existsByEmail("max@pragma.com")).thenReturn(Mono.just(false));
         when(userPersistencePort.registerUser(any(User.class))).thenReturn(Mono.just(expectedUser));
 
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, VALID_BIRTH_DATE, ADDRESS, PHONE, "max@pragma.com", MAX_SALARY
                 ))
@@ -173,13 +165,11 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should accept optional fields as null")
     void registerUser_WithOptionalFieldsNull_ReturnsUser() {
-        // Arrange
         User expectedUser = new User(1L, FIRST_NAME, LAST_NAME, null, null, null, VALID_EMAIL, VALID_SALARY);
 
         when(userPersistencePort.existsByEmail(VALID_EMAIL)).thenReturn(Mono.just(false));
         when(userPersistencePort.registerUser(any(User.class))).thenReturn(Mono.just(expectedUser));
 
-        // Act & Assert
         StepVerifier.create(userUseCase.registerUser(
                         FIRST_NAME, LAST_NAME, null, null, null, VALID_EMAIL, VALID_SALARY
                 ))

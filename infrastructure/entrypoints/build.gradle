@@ -13,4 +13,9 @@ dependencies {
 
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.5.0'
+    implementation 'io.swagger.core.v3:swagger-core:2.2.22'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.22'
+
 }

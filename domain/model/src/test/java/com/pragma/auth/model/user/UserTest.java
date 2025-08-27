@@ -9,7 +9,6 @@ class UserTest {
 
     @Test
     void userCreation_WithValidData_ShouldCreateInstance() {
-        // Arrange
         Long id = 1L;
         String firstName = "John";
         String lastName = "Doe";
