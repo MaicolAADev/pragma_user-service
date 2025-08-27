@@ -1,0 +1,39 @@
+##Spring Configuration
+server:
+  port: 8080
+spring:
+  application:
+    name: auth
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  profiles:
+    include:
+  r2dbc:
+    host: localhost
+    port: 5432
+    database: p_auth
+    schema: public
+    username: postgres
+    password: 1234
+    default-schema: public
+
+logging:
+  level:
+    com.pragma.auth: DEBUG
+    org.springframework: DEBUG
+    org.springframework.data.r2dbc: DEBUG
+    org.springframework.web: DEBUG
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
