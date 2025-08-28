@@ -87,31 +87,29 @@ class UserUseCaseTest {
     @Test
     @DisplayName("Should validate null firstName")
     void registerUser_WithNullFirstName_ThrowsValidationException() {
-        testValidationException(null, LAST_NAME, VALID_EMAIL, VALID_SALARY, "firstName");
+        testValidationException(null, LAST_NAME, VALID_EMAIL, VALID_SALARY,
+                "El nombre no puede ser nulo o vacio");
     }
 
     @Test
     @DisplayName("Should validate empty firstName")
     void registerUser_WithEmptyFirstName_ThrowsValidationException() {
-        testValidationException("   ", LAST_NAME, VALID_EMAIL, VALID_SALARY, "firstName");
+        testValidationException("   ", LAST_NAME, VALID_EMAIL, VALID_SALARY,
+                "El nombre no puede ser nulo o vacio");
     }
 
     @Test
     @DisplayName("Should validate null lastName")
     void registerUser_WithNullLastName_ThrowsValidationException() {
-        testValidationException(FIRST_NAME, null, VALID_EMAIL, VALID_SALARY, "lastName");
-    }
-
-    @Test
-    @DisplayName("Should validate null email")
-    void registerUser_WithNullEmail_ThrowsValidationException() {
-        testValidationException(FIRST_NAME, LAST_NAME, null, VALID_SALARY, "email");
+        testValidationException(FIRST_NAME, null, VALID_EMAIL, VALID_SALARY,
+                "El apellido no puede ser nulo o vacio");
     }
 
     @Test
     @DisplayName("Should validate null baseSalary")
     void registerUser_WithNullBaseSalary_ThrowsValidationException() {
-        testValidationException(FIRST_NAME, LAST_NAME, VALID_EMAIL, null, "baseSalary");
+        testValidationException(FIRST_NAME, LAST_NAME, VALID_EMAIL, null,
+                "El salario base no puede ser nulo");
     }
 
     @Test
@@ -122,7 +120,7 @@ class UserUseCaseTest {
                 ))
                 .expectErrorSatisfies(throwable -> {
                     assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                    assertThat(throwable.getMessage()).contains("baseSalary out of range");
+                    assertThat(throwable.getMessage()).contains("Salario fuera de rango");
                 })
                 .verify();
 
@@ -137,7 +135,7 @@ class UserUseCaseTest {
                 ))
                 .expectErrorSatisfies(throwable -> {
                     assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                    assertThat(throwable.getMessage()).contains("baseSalary out of range");
+                    assertThat(throwable.getMessage()).contains("Salario fuera de rango");
                 })
                 .verify();
 

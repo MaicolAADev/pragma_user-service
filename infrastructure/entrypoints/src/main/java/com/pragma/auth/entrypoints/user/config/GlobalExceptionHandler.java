@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Método estandarizado para respuestas de error
     private ResponseEntity<Map<String, Object>> buildErrorResponse(
             HttpStatus status, String errorCode, List<String> errorMessages) {
 

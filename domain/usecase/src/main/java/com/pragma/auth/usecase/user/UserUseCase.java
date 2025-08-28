@@ -29,20 +29,20 @@ public class UserUseCase {
         log.fine("UserUseCase.registerUser - start - email=" + email);
 
         if (firstName == null || firstName.trim().isEmpty()) {
-            return Mono.error(new IllegalArgumentException("firstName must not be null or empty"));
+            return Mono.error(new IllegalArgumentException("El nombre no puede ser nulo o vacio"));
         }
         if (lastName == null || lastName.trim().isEmpty()) {
-            return Mono.error(new IllegalArgumentException("lastName must not be null or empty"));
+            return Mono.error(new IllegalArgumentException("El apellido no puede ser nulo o vacio"));
         }
         if (email == null || email.trim().isEmpty()) {
-            return Mono.error(new IllegalArgumentException("email must not be null or empty"));
+            return Mono.error(new IllegalArgumentException("El email no puede ser nulo o vacio"));
         }
         if (baseSalary == null) {
-            return Mono.error(new IllegalArgumentException("baseSalary must not be null"));
+            return Mono.error(new IllegalArgumentException("El salario base no puede ser nulo"));
         }
         if (baseSalary.compareTo(BigDecimal.ZERO) < 0 ||
                 baseSalary.compareTo(new BigDecimal("15000000")) > 0) {
-            return Mono.error(new IllegalArgumentException("baseSalary out of range"));
+            return Mono.error(new IllegalArgumentException("Salario fuera de rango"));
         }
 
         return persistence.existsByEmail(email)
@@ -70,7 +70,7 @@ public class UserUseCase {
 
     public static class DuplicateEmailException extends RuntimeException {
         public DuplicateEmailException(String email) {
-            super("Email already registered: " + email);
+            super("El email ya esta registrado: " + email);
         }
     }
 }
