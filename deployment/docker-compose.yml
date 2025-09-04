@@ -1,0 +1,52 @@
+name: autenticacion-service
+services:
+  autenticacion-db:
+    image: postgres:15-alpine
+    container_name: autenticacion-db
+    environment:
+      POSTGRES_DB: autenticacion
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - autenticacion_data:/var/lib/postgresql/data
+    networks:
+      - crediya-net
+
+  autenticacion-app:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: autenticacion-app
+    depends_on:
+      - autenticacion-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_R2DBC_URL: r2dbc:postgresql://autenticacion-db:5432/autenticacion
+      SPRING_R2DBC_USERNAME: postgres
+      SPRING_R2DBC_PASSWORD: postgres
+    ports:
+      - "8081:8081"
+    networks:
+      - crediya-net
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5051:80"
+    networks:
+      - crediya-net
+    depends_on:
+      - autenticacion-db
+
+volumes:
+  autenticacion_data:
+
+networks:
+  crediya-net:
+    external: true
