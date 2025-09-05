@@ -142,7 +142,8 @@ public class RouterRest {
         return route(POST(userPath.getUsers()), userHandler::listenSaveUser)
                 .andRoute(GET(userPath.getUserByEmail()), userHandler::listenFindByEmail)
                 .andRoute(POST(userPath.getAuthenticate()), userHandler::listenAuthenticate)
-                .andRoute(POST(userPath.getUsersByIdentificationNumbers()), userHandler::listenFindUsersByIdentityDocument);
+                .andRoute(POST(userPath.getUsersByIdentificationNumbers()), userHandler::listenFindUsersByIdentityDocument)
+                .andRoute(GET(userPath.getValidateToken()), userHandler::listenValidateToken);
 
     }
 }

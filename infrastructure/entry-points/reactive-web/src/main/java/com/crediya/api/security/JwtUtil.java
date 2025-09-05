@@ -1,5 +1,6 @@
 package com.crediya.api.security;
 
+import com.crediya.api.dto.TokenInfoResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -22,12 +23,12 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String subject, String role) {
+    public String generateToken(String subject, String role, String id, String identityDocument) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(subject)
                 .setClaims(Map.of(
-                        "role", role
+                        "role", role, "id", id, "email", subject, "identityDocument", identityDocument
                 ))
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + expirationMillis))
@@ -58,5 +59,25 @@ public class JwtUtil {
         return getClaims(token).get("role").toString();
     }
 
+
+    public TokenInfoResponse getTokenInfo(String token) {
+        Claims claims = getClaims(token);
+        boolean isValid = !isTokenInvalid(token);
+
+        return new TokenInfoResponse(
+                claims.get("id").toString(),
+                claims.getSubject(),
+                claims.get("role").toString(),
+                claims.get("email").toString(),
+                claims.get("identityDocument").toString(),
+                isValid,
+                claims.getIssuedAt().getTime(),
+                claims.getExpiration().getTime()
+        );
+    }
+
+    public boolean validateToken(String token) {
+        return !isTokenInvalid(token);
+    }
 
 }

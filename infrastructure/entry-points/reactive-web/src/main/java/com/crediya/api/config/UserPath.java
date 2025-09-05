@@ -12,4 +12,5 @@ public class UserPath {
     private String userByEmail;
     private String authenticate;
     private String usersByIdentificationNumbers;
+    private String validateToken;
 }

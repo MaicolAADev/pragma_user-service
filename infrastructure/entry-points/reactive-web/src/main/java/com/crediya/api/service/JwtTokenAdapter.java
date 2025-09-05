@@ -14,7 +14,7 @@ public class JwtTokenAdapter implements TokenInputPort {
     }
 
     @Override
-    public String generateToken(String subject, String role) {
-        return jwtUtil.generateToken(subject, role);
+    public String generateToken(String subject, String role, String id, String identityDocument) {
+        return jwtUtil.generateToken(subject, role, id, identityDocument);
     }
 }

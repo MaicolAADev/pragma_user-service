@@ -31,7 +31,7 @@ public class AuthUseCase implements AuthInputPort {
     public Mono<String> authenticate(String email, String password) {
         return findUser(email)
                 .flatMap(user -> validatePassword(user, password))
-                .flatMap(this::generateToken);
+                .flatMap(user -> generateToken(user));
     }
 
     private Mono<User> findUser(String email) {
@@ -56,7 +56,9 @@ public class AuthUseCase implements AuthInputPort {
     private String buildToken(User user) {
         return tokenInputPort.generateToken(
                 user.getEmail(),
-                user.getRoleName()
+                user.getRoleName(),
+                user.getId(),
+                user.getIdentityDocument()
         );
     }
 }

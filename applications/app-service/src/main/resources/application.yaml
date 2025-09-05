@@ -30,6 +30,7 @@ routes:
     userByEmail: "/api/v1/usuarios/{email}"
     authenticate: "/api/v1/login"
     usersByIdentificationNumbers: "/api/v1/usuarios/identification-numbers"
+    validateToken: "/api/v1/validate-token"
 
 #adapters:
   #r2dbc:

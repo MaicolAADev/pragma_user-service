@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .permitAll()
                         .pathMatchers("/api/v1/usuarios").hasAnyRole(ADMIN, ADVISER)
                         .pathMatchers("/api/v1/usuarios/**").hasAnyRole(ADMIN, ADVISER, USER)
+                        .pathMatchers("/api/v1/validate-token").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION)

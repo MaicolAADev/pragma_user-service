@@ -44,6 +44,7 @@ public class MyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
                                 .map(roleEntity -> {
                                     User user = mapper.map(entity, User.class);
                                     user.setRoleName(roleEntity.getName());
+                                    user.setEmail(email);
                                     return user;
                                 })
                 )

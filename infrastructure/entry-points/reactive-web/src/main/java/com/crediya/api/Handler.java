@@ -4,7 +4,9 @@ package com.crediya.api;
 import com.crediya.api.dto.AuthDTO;
 import com.crediya.api.dto.CreateUserDTO;
 import com.crediya.api.dto.IdentitiesRequestDTO;
+import com.crediya.api.dto.TokenInfoResponse;
 import com.crediya.api.mapper.UserDTOMapper;
+import com.crediya.api.security.JwtUtil;
 import com.crediya.api.service.AuthService;
 import com.crediya.model.user.gateways.UserInputPort;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class Handler  {
     private final UserInputPort userInputPort;
     private final UserDTOMapper userDTOMapper;
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
     public Mono<ServerResponse> listenSaveUser(ServerRequest serverRequest) {
         log.debug("Recibiendo petición para crear usuario");
@@ -68,4 +71,25 @@ public class Handler  {
                 .flatMap(userResponses -> ServerResponse.ok().bodyValue(userResponses));
     }
 
+    public Mono<ServerResponse> listenValidateToken(ServerRequest serverRequest) {
+        log.debug("Recibiendo petición para validar token");
+
+        String authHeader = serverRequest.headers().firstHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ServerResponse.status(HttpStatus.UNAUTHORIZED)
+                    .bodyValue(Map.of("error", "Token no proporcionado o formato incorrecto"));
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            TokenInfoResponse tokenInfo = jwtUtil.getTokenInfo(token);
+            return ServerResponse.ok().bodyValue(tokenInfo);
+        } catch (Exception e) {
+            log.warn("Token inválido: {}", e.getMessage());
+            return ServerResponse.status(HttpStatus.UNAUTHORIZED)
+                    .bodyValue(Map.of("error", "Token inválido", "valid", false));
+        }
+    }
 }
