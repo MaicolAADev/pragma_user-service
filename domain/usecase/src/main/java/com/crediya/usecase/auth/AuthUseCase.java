@@ -29,9 +29,13 @@ public class AuthUseCase implements AuthInputPort {
 
     @Override
     public Mono<String> authenticate(String email, String password) {
+        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            return Mono.error(new ArgumentException(INVALID_CREDENTIALS_MSG));
+        }
+
         return findUser(email)
                 .flatMap(user -> validatePassword(user, password))
-                .flatMap(user -> generateToken(user));
+                .flatMap(this::generateToken);
     }
 
     private Mono<User> findUser(String email) {
@@ -41,16 +45,27 @@ public class AuthUseCase implements AuthInputPort {
     }
 
     private Mono<User> validatePassword(User user, String rawPassword) {
+        if (user.getPassword() == null) {
+            logger.info("Usuario no tiene contraseña: " + user.getEmail());
+            return Mono.error(new ArgumentException(INVALID_CREDENTIALS_MSG));
+        }
+
         if (!passwordEncoderInputPort.matches(rawPassword, user.getPassword())) {
             logger.info("Credenciales inválidas para usuario: " + user.getEmail());
             return Mono.error(new ArgumentException(INVALID_CREDENTIALS_MSG));
         }
+
         logger.info("Contraseña válida para usuario: " + user.getEmail());
         return Mono.just(user);
     }
 
     private Mono<String> generateToken(User user) {
-        return Mono.just(buildToken(user));
+        try {
+            String token = buildToken(user);
+            return Mono.just(token);
+        } catch (Exception e) {
+            return Mono.error(new RuntimeException("Error generando token: " + e.getMessage()));
+        }
     }
 
     private String buildToken(User user) {

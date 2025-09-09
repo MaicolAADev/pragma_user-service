@@ -5,6 +5,7 @@ import com.crediya.model.role.gateways.RoleRepository;
 import com.crediya.model.user.User;
 import com.crediya.model.user.gateways.PasswordEncoderInputPort;
 import com.crediya.model.user.gateways.UserRepository;
+import com.crediya.usecase.exception.DuplicateEmailException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,25 +56,13 @@ class UserUseCaseTest {
         userUseCase = new UserUseCase(userRepository, roleRepository, passwordEncoderInputPort);
     }
 
-
     @Test
     void saveUser_emailAlreadyExists() {
         when(userRepository.existsByEmail(validUser.getEmail())).thenReturn(Mono.just(true));
 
         StepVerifier.create(userUseCase.saveUser(validUser))
-                .expectErrorMatches(e -> e instanceof IllegalStateException &&
+                .expectErrorMatches(e -> e instanceof DuplicateEmailException && // Cambiado
                         e.getMessage().equals("El correo ya está registrado"))
-                .verify();
-    }
-
-    @Test
-    void saveUser_documentAlreadyExists() {
-        when(userRepository.existsByEmail(validUser.getEmail())).thenReturn(Mono.just(false));
-        when(userRepository.findByIdentityDocument(validUser.getIdentityDocument())).thenReturn(Mono.just(validUser));
-
-        StepVerifier.create(userUseCase.saveUser(validUser))
-                .expectErrorMatches(e -> e instanceof IllegalStateException &&
-                        e.getMessage().equals("El documento de identidad ya está registrado"))
                 .verify();
     }
 

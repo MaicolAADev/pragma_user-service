@@ -2,17 +2,14 @@ package com.crediya.api;
 
 import com.crediya.usecase.exception.ArgumentException;
 import com.crediya.usecase.exception.DuplicateEmailException;
-import com.crediya.usecase.user.UserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalHandlerException {
