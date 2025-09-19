@@ -32,23 +32,23 @@ routes:
     usersByIdentificationNumbers: "/api/v1/usuarios/identification-numbers"
     validateToken: "/api/v1/validate-token"
 
+#adapters:
+#  r2dbc:
+#    host: ${SPRING_R2DBC_HOST:pragma}
+#    port: ${SPRING_R2DBC_PORT:5432}
+#    database: ${SPRING_R2DBC_DATABASE:p_auth}
+#    schema: ${SPRING_R2DBC_SCHEMA:public}
+#    username: ${SPRING_R2DBC_USERNAME:postgres}
+#    password: ${SPRING_R2DBC_PASSWORD:1234}
+
 adapters:
   r2dbc:
-    host: ${SPRING_R2DBC_HOST:pragma}
-    port: ${SPRING_R2DBC_PORT:5432}
-    database: ${SPRING_R2DBC_DATABASE:p_auth}
-    schema: ${SPRING_R2DBC_SCHEMA:public}
-    username: ${SPRING_R2DBC_USERNAME:postgres}
-    password: ${SPRING_R2DBC_PASSWORD:1234}
-
-#adapters:
- # r2dbc:
- #   host: "localhost"
- #   port: 5432
- #   database: "p_auth"
- #   schema: "public"
- #   username: "postgres"
- #   password: "1234"
+    host: "localhost"
+    port: 5432
+    database: "autenticacion"
+    schema: "public"
+    username: "postgres"
+    password: "postgres"
 jwt:
   secret: "Aa5592770*1234567890abcdef12345678"
   expiration-ms: 3600000
